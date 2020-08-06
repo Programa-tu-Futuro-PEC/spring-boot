@@ -45,4 +45,19 @@ public class PaisResource {
         return prueba;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/numero/{id}")
+    public int getValor(@PathVariable("id") String id){
+        return prueba.getOrDefault(id, -1);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/numero/{id}")
+    public void borrarValor(@PathVariable("id") String id){
+        prueba.remove(id);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/numero/")
+    public void agregarEntrada(@RequestParam String llave, @RequestParam int valor){
+        prueba.put(llave, valor);
+    }
+
 }
