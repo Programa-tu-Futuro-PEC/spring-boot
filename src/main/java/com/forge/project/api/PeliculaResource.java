@@ -2,10 +2,7 @@ package com.forge.project.api;
 
 import com.forge.project.jdbc.dao.PeliculaDAO;
 import com.forge.project.jdbc.dto.Pelicula;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -21,5 +18,40 @@ public class PeliculaResource {
                 .obtenerPeliculaPorNombre("%"+nombre+"%");
         return peliculas;
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/pelicula/actor/{nombre}")
+    public List<Pelicula> getPeliculasByNombreActorLike(@PathVariable("nombre") String nombre)
+            throws SQLException {
+        List<Pelicula> peliculas = new PeliculaDAO()
+                .obtenerPeliculaPorActorLike("%"+nombre+"%");
+        return peliculas;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/pelicula/personaje/{nombre}")
+    public List<Pelicula> getPeliculasByNombrePersonajeLike(@PathVariable("nombre") String nombre)
+            throws SQLException {
+        List<Pelicula> peliculas = new PeliculaDAO()
+                .obtenerPeliculasPorPersonaje("%"+nombre+"%");
+        return peliculas;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/pelicula/")
+    public Pelicula createPelicula(@RequestBody Pelicula p) throws SQLException {
+        new PeliculaDAO().insertarPelicula(p);
+        return p;
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/pelicula/")
+    public void borrarPelicula(@RequestBody Pelicula p) throws SQLException {
+        new PeliculaDAO().borrarPelicula(p);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/pelicula/{nombre}/{anho}")
+    public void editarPelicula(@PathVariable("nombre") String nombre,
+                               @PathVariable("anho") int anho,
+                               @RequestBody Pelicula p) throws SQLException {
+        new PeliculaDAO().editarPelicula(nombre, anho, p);
+    }
+
 
 }

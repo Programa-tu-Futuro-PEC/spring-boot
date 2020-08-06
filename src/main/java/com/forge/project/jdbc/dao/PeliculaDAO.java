@@ -42,7 +42,7 @@ public class PeliculaDAO {
     public List<Pelicula> obtenerPeliculasPorPersonaje(String personaje) throws SQLException {
         String sql = "select distinct nombre, año, calificacion " +
                 "from personaje, pelicula " +
-                "where año=p_año and nombre=p_nombre and personaje=?";
+                "where año=p_año and nombre=p_nombre and personaje like ?";
         return obtenerResultados(sql, personaje);
     }
 
@@ -78,4 +78,36 @@ public class PeliculaDAO {
         return resultado;
     }
 
+    public void insertarPelicula(Pelicula p) throws SQLException {
+        String sql = "insert into pelicula(nombre, año, calificacion) " +
+                "values (?, ?, ?)";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, p.getNombre());
+        ps.setInt(2, p.getAnho());
+        ps.setDouble(3, p.getCalificacion());
+        ps.executeUpdate();
+    }
+
+    public void borrarPelicula(Pelicula p) throws SQLException {
+        String sql = "delete from pelicula where " +
+                "nombre=? and año=? and calificacion=?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, p.getNombre());
+        ps.setInt(2, p.getAnho());
+        ps.setDouble(3, p.getCalificacion());
+        ps.executeUpdate();
+    }
+
+    public void editarPelicula(String nombre, int anho, Pelicula p) throws SQLException {
+        String sql = "update pelicula " +
+                "set nombre=?, año=?, calificacion=? " +
+                "where nombre=? and año=?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, p.getNombre());
+        ps.setInt(2, p.getAnho());
+        ps.setDouble(3, p.getCalificacion());
+        ps.setString(4, nombre);
+        ps.setInt(5, anho);
+        ps.executeUpdate();
+    }
 }
