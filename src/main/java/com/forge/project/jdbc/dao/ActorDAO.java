@@ -43,12 +43,22 @@ public class ActorDAO {
         return resultado;
     }
 
-    public void insertarActor(String nombre, char genero) throws SQLException {
-        String sql = "insert into actor(nombre, genero) values ?, ?";
+    public void insertarActor(Actor A) throws SQLException {
+        String sql = "insert into actor(nombre, genero) values (?, ?)";
         PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setString(1, nombre);
-        ps.setString(2, ""+genero);
+        ps.setString(1, A.getNombre());
+        ps.setString(2, ""+A.getGenero());
         ps.executeUpdate();
     }
 
+    public void editarActor(String nombre, Actor p) throws SQLException {
+        String sql = "update actor " +
+                "set nombre=?, genero=? " +
+                "where nombre=?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, p.getNombre());
+        ps.setString(2, p.getGenero()+"");
+        ps.setString(3, nombre);
+        ps.executeUpdate();
+    }
 }
